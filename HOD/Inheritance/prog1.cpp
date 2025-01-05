@@ -62,6 +62,8 @@ public:
 
     FullName &operator=(const FullName &other)
     {
+        if (this == &other) // Self-assignment check
+            return *this;
         Name::operator=(other);
         delete[] prefix;
         prefix = new char[strlen(other.prefix) + 1];

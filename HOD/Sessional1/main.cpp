@@ -121,7 +121,7 @@ istream &operator>>(istream &in, String &str)
     {
         str.name[i] = buffer[i];
     }
-    str.name[str.length] = '\0';
+    
     return in;
 }
 void doSomething(String aString)
