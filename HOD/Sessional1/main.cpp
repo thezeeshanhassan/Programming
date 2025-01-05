@@ -12,38 +12,14 @@ public:
     String() : name(nullptr), length(0) {}
     String(const char *aname);
     String(const String &obj);
-    friend String operator+(const String &lobj, const String &robj);
+    bool ends_with(const char *str) const;
+    String &operator=(const String &obj);
     char &operator[](int index);
+    int size() const;
 
-    void printString()
-    {
-        cout << name << endl;
-    }
-
-
-    friend istream &operator>>(istream &is, String &obj)
-    {
-        char buffer[100]; 
-        is >> buffer;
-        obj.length = strlen(buffer);
-        obj.name = new char[obj.length + 1];
-        strcpy(obj.name, buffer);
-        return is;
-    }
-
-    friend ostream &operator<<(ostream &os, const String &obj)
-    {
-        os << obj.name;
-        return os;
-    }
-
-    bool ends_with(const char *suffix)
-    {
-        int suffixLength = strlen(suffix);
-        if (suffixLength > length)
-            return false;
-        return strcmp(name + length - suffixLength, suffix) == 0;
-    }
+    friend String operator+(const String &lobj, const String &robj);
+    friend ostream &operator<<(ostream &out, const String &obj);
+    friend istream &operator>>(istream &in, String &str);
 };
 
 String::String(const char *aname)
@@ -65,6 +41,37 @@ String::String(const String &obj)
     {
         name[i] = obj.name[i];
     }
+}
+String &String::operator=(const String &obj)
+{
+    if (this != &obj)
+    {
+        delete[] name;
+        length = obj.length;
+        name = new char[obj.length + 1];
+        for (int i{}; i < length; i += 1)
+        {
+            name[i] = obj.name[i];
+        }
+    }
+    return *this;
+}
+bool String::ends_with(const char *str) const
+{
+    int strLength = strlen(str);
+    if (strLength > this->length)
+    {
+        return false;
+    }
+    int startPoint{this->length - strLength};
+    for (int i{}; i < strLength; i++)
+    {
+        if (name[startPoint + i] != str[i])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 String operator+(const String &lobj, const String &robj)
@@ -92,26 +99,57 @@ char &String::operator[](int index)
     return name[index];
 }
 
+int String::size() const
+{
+    cout << "Size of string Function Invked" << endl;
+    return length;
+}
+
+ostream &operator<<(ostream &out, const String &str)
+{
+    out << str.name;
+    return out;
+}
+
+istream &operator>>(istream &in, String &str)
+{
+    char buffer[100];
+    in >> buffer;
+    str.length = strlen(buffer);
+    str.name = new char[str.length + 1];
+    for (int i{}; i < str.length; i += 1)
+    {
+        str.name[i] = buffer[i];
+    }
+    str.name[str.length] = '\0';
+    return in;
+}
+void doSomething(String aString)
+{
+    cout << aString << endl;
+}
+
 int main()
 {
     String names[10] = {"Akhuwat", "College", "Kasur"};
     names[4] = names[0] + names[1] + names[2];
 
-    names[4].printString();
+    cout << names[4] << endl;
 
     names[4][6] = 'Z';
-    names[4].printString();
-
+    cout << names[4] << endl;
+    cout << names[2] << endl;
+    // doSomething(names[4]);
     int size();
-    // cin >> names[3];
-
-    // if (names[3].ends_with("abc12"))
-    // {
-    //     cout << names[3] << " Ends With ABC12" << endl;
-    // }
-    // else
-    // {
-    //     cout << names[3] << " Does Not Ends With ABC12" << endl;
-    // }
-    // return 0;
+    cin >> names[3];
+    cout << names[3] << endl;
+    if (names[3].ends_with("abc12"))
+    {
+        cout << names[3] << " Ends With ABC12" << endl;
+    }
+    else
+    {
+        cout << names[3] << " Does Not Ends With ABC12" << endl;
+    }
+    return 0;
 }

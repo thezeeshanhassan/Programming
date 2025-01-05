@@ -12,12 +12,29 @@ public:
     String() : name(nullptr), length(0) {}
     String(const char *aname);
     String(const String &obj);
-    char &operator[](int index);
+    char &operator[](int index) const;
     friend String operator+(const String &lobj, const String &robj);
     friend ostream &operator<<(ostream &out, const String &str);
     friend istream &operator>>(istream &in, const String &str);
     bool ends_with(const char *str) const;
+    String &operator=(const String &obj);
 };
+
+String &String::operator=(const String &obj)
+{
+    cout << "Assignment Operator Called" << endl;
+    if (this != &obj)
+    {
+        delete[] name;
+        length = obj.length;
+        name = new char[obj.length + 1];
+        for (int i{}; i < length; i += 1)
+        {
+            name[i] = obj.name[i];
+        }
+    }
+    return *this;
+}
 
 String::String(const char *aname)
 {
@@ -55,7 +72,7 @@ String operator+(const String &lobj, const String &robj)
     return newStr;
 }
 
-char &String::operator[](int index)
+char &String::operator[](int index) const
 {
     if (index < 0 || index >= this->length)
     {
@@ -120,18 +137,18 @@ int main()
 
     names[4][6] = 'Z';
     cout << names[4] << endl;
-    doSomething(names[4]);
+    // doSomething(names[4]);
     // int size();
     // cin >> names[3];
-    // cout << names[3] << endl;
+    cout << names[2] << endl;
 
-    // if (names[3].ends_with("abc12"))
+    // if (names[2].ends_with("abc12"))
     // {
-    //     cout << names[3] << " Ends With ABC12" << endl;
+    //     cout << names[2] << " Ends With ABC12" << endl;
     // }
     // else
     // {
-    //     cout << names[3] << " Does Not Ends With ABC12" << endl;
+    //     cout << names[2] << " Does Not Ends With ABC12" << endl;
     // }
     // return 0;
 }
